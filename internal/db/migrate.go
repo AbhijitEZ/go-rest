@@ -11,10 +11,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var (
-	ErrorNoMigrationChange = errors.New("no change")
-)
-
 func (db *Database) MigrateDB() error {
 	fmt.Println("migrating the database ↻")
 	driver, err := postgres.WithInstance(db.Client.DB, &postgres.Config{})
@@ -35,7 +31,7 @@ func (db *Database) MigrateDB() error {
 		return err
 	}
 
-	if err := m.Up(); err != nil && err.Error() != ErrorNoMigrationChange.Error() {
+	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return fmt.Errorf("could not run up migrations %w", err)
 	}
 

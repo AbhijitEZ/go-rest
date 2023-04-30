@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"go-rest/internal/comment"
 	"go-rest/internal/db"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -23,6 +25,12 @@ func Run() error {
 		fmt.Println("Failed to do the migrations")
 		return err
 	}
+
+	// Services
+	cmtService := comment.NewService(dbInstance)
+	result, _ := cmtService.GetComment(context.Background(), "unqiue-id")
+
+	fmt.Println(result)
 
 	return nil
 }

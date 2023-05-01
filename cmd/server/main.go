@@ -1,10 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"go-rest/internal/comment"
 	"go-rest/internal/db"
+	transportHttp "go-rest/internal/transport/http"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -28,9 +28,18 @@ func Run() error {
 
 	// Services
 	cmtService := comment.NewService(dbInstance)
-	result, _ := cmtService.GetComment(context.Background(), "unqiue-id")
 
-	fmt.Println(result)
+	httpHandler := transportHttp.NewHandler(cmtService)
+	if err := httpHandler.Serve(); err != nil {
+		return err
+	}
+	// result, _ := cmtService.GetComment(context.Background(), "unqiue-id")
+	// cmtService.PostComment(context.Background(), comment.Comment{
+	// 	ID:     "test-comment-id",
+	// 	Slug:   "manual-test",
+	// 	Author: "Abhijit",
+	// 	Body:   "hello beautiful world",
+	// })
 
 	return nil
 }

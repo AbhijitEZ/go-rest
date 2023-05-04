@@ -33,13 +33,6 @@ func Run() error {
 	if err := httpHandler.Serve(); err != nil {
 		return err
 	}
-	// result, _ := cmtService.GetComment(context.Background(), "unqiue-id")
-	// cmtService.PostComment(context.Background(), comment.Comment{
-	// 	ID:     "test-comment-id",
-	// 	Slug:   "manual-test",
-	// 	Author: "Abhijit",
-	// 	Body:   "hello beautiful world",
-	// })
 
 	return nil
 }

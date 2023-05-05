@@ -26,6 +26,7 @@ func NewHandler(service CommentService) *Handler {
 	h.mapRoutes()
 	h.Router.Use(JSONMiddleware)
 	h.Router.Use(LoggingMiddleware)
+	h.Router.Use(TimeoutMiddleWare)
 
 	h.Server = &http.Server{
 		Addr:    "0.0.0.0:8080",
@@ -37,7 +38,7 @@ func NewHandler(service CommentService) *Handler {
 
 func (h *Handler) mapRoutes() {
 	h.Router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Health check :)")
+		fmt.Fprintf(w, "Health check)")
 	})
 
 	h.Router.HandleFunc("/api/v1/comment", h.PostComment).Methods("POST")

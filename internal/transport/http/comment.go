@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 )
 
@@ -38,6 +39,13 @@ func convertCommentRequestToComment(cmt PostCommentRequest) comment.Comment {
 func (h *Handler) PostComment(w http.ResponseWriter, r *http.Request) {
 	var cmt PostCommentRequest
 	if err := json.NewDecoder(r.Body).Decode(&cmt); err != nil {
+		return
+	}
+
+	validate := validator.New()
+	err := validate.Struct(cmt)
+	if err != nil {
+		http.Error(w, "not valid request", http.StatusBadRequest)
 		return
 	}
 
